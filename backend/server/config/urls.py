@@ -30,6 +30,11 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import routers, serializers, viewsets
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 User = get_user_model()
 
 # Serializers define the API representation.
@@ -54,4 +59,11 @@ router.register(r"users", UserViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+
+    #  JWT authentication endpoints
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+
+    # user registration endpoint
+    path("api/user/", include("apps.users.urls")),
 ]
